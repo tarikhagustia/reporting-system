@@ -23,7 +23,9 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form">
+            @include('includes.message')
+            <form role="form" method="post" action="{{route('product.add.post')}}">
+              {{ csrf_field() }}
               <div class="box-body">
                 <div class="form-group @if($errors->has('sku')) has-error @endif">
                   <label for="exampleInputEmail1">SKU</label>
@@ -42,7 +44,9 @@
                 <div class="form-group @if($errors->has('category_id')) has-error @endif">
                   <label for="name">Kategori</label>
                   <select class="form-control" name="category_id">
-
+                    @foreach($categories as $row)
+                      <option value="{{ $row->id }}">{{$row->category_name}}</option>
+                    @endforeach
                   </select>
                   <p class="help-block">
                     {{$errors->first('category_id')}}

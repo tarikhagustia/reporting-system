@@ -25,14 +25,25 @@
             <!-- /.box-header -->
             <!-- form start -->
               <div class="box-body">
-                <form class="" action="index.html" method="post">
-                  <div class="form-group">
-                    <label for="">Pilih tanggal</label>
-                    <input type="text" class="form-control" id="datepicker">
+                <form class="" action="" method="get">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="">Dari tanggal</label>
+                        <input type="text" name="dateFrom" class="form-control" id="datepicker">
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="">Sampai tanggal</label>
+                        <input type="text" name="dateTo" class="form-control" id="datepicker2">
+                      </div>
+                    </div>
                   </div>
+
                   <div class="form-group">
-                    <button type="button" class="btn btn-success" name="button">Proses</button>
-                    <button type="button" class="btn btn-warning" name="button">Export ke excel</button>
+                    <button type="submit" class="btn btn-success" name="button">Proses</button>
+                    {{-- <button type="button" class="btn btn-warning" name="button">Export ke excel</button> --}}
                   </div>
                 </form>
                 <div class="table-responsive">
@@ -47,6 +58,31 @@
                       <th>Persentase</th>
                     </tr>
                     </thead>
+                    <tbody>
+                      @foreach ($reports as $key => $value)
+
+                      <tr>
+                        <td>
+                            {{$loop->iteration}}
+                        </td>
+                        <td>
+                          {{$value->created_at}}
+                        </td>
+                        <td>
+                          {{number_format($value->getRemainTargetByDate($dateFrom))}}
+                        </td>
+                        <td>
+                          {{number_format($value->dayily_sales)}}
+                        </td>
+                        <td>
+                          {{number_format($value->getTotalSalesByDate($dateFrom))}}
+                        </td>
+                        <td>
+                          {{ ($value->getTotalSalesByDate($dateFrom) / $value->getRemainTargetByDate($dateFrom)) * 100 }}
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -72,6 +108,9 @@
 
     //Date picker
     $('#datepicker').datepicker({
+      autoclose: true
+    })
+    $('#datepicker2').datepicker({
       autoclose: true
     })
   })

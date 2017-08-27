@@ -15,9 +15,11 @@ class CreateSaleinsTable extends Migration
     {
         Schema::create('saleins', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sales_id')->unsigned();
+            // $table->integer('sales_id')->unsigned();
+            $table->string('order_number')->nullable();
             $table->integer('product_id')->unsigned();
-            $table->integer('shop_id')->unsigned();
+            // $table->integer('shop_id')->unsigned();
+            $table->enum('status', ['processed', 'ordering'])->nullable();
             $table->integer('quantity');
             $table->timestamps();
         });

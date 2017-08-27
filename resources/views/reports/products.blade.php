@@ -31,15 +31,34 @@
                 <div class="table-responsive">
                   <table id="product-report" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                      <th>Nomor</th>
-                      <th>Nama Produk</th>
-                      <th>Nama Suplier</th>
-                      <th>Jumlah Stok</th>
-                      <th>Status Jual</th>
-                    </tr>
+                      <tr>
+                        <th>Nomor</th>
+                        <th>Nama Produk</th>
+                        <th>Jumlah Stok</th>
+                        <th>Harga Jual</th>
+                      </tr>
                     </thead>
+
+                    <tbody>
+                      @foreach ($products as $key => $value)
+                        <tr>
+                          <td>
+                              {{$loop->iteration}}
+                          </td>
+                          <td>
+                            {{$value->name}}
+                          </td>
+                          <td>
+                            {{number_format($value->stock)}}
+                          </td>
+                          <td>
+                            {{number_format($value->selling_price)}}
+                          </td>
+                        </tr>
+                      @endforeach
+                    </tbody>
                   </table>
+
                 </div>
               </div>
               <!-- /.box-body -->

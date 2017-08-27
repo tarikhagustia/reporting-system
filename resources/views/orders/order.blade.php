@@ -13,7 +13,7 @@
   </section>
 
   <!-- Main content -->
-  <section class="content">
+  <section class="content" id="app">
     <div class="row">
       <div class="col-xs-12">
           <!-- general form elements -->
@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <label for="order_number" class="col-sm-1 control-label">Order No:</label>
                     <div class="col-sm-5">
-                      <input class="form-control" name="order_number" id="order_number" placeholder="Nomor Order" type="text">
+                      <input class="form-control" name="order_number" id="order_number" placeholder="Nomor Order" type="text" v-model="order_number">
                     </div>
                   </div>
                 </form>
@@ -37,20 +37,26 @@
                   <div class="form-group">
                     <label for="order_number" class="col-sm-1 control-label">SKU :</label>
                     <div class="col-sm-5">
-                      <input class="form-control" name="sku" id="sku" placeholder="Nomor SKU" type="text">
+                      <input class="form-control" name="sku" id="sku" v-model="sku" placeholder="Nomor SKU" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="order_number" class="col-sm-1 control-label">Jumlah :</label>
+                    <div class="col-sm-5">
+                      <input class="form-control" name="sku" id="sku" v-model="jumlah" placeholder="Nomor SKU" type="text">
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <label for="order_number" class="col-sm-1 control-label">Nama :</label>
                     <div class="col-sm-5">
                       <input class="form-control" name="name" id="name" placeholder="Nama produk" type="text">
                     </div>
-                  </div>
+                  </div> --}}
 
                   <div class="form-group">
                     <div class="col-sm-2 col-sm-offset-1">
-                      <button type="button" class="btn btn-success" name="button">Tambah</button>
+                      <button type="button" class="btn btn-success" name="button" @click="onPressAdd">Tambah</button>
                     </div>
                   </div>
                 </form>
@@ -68,12 +74,25 @@
                       Jumlah
                     </th>
                   </tr>
+                  <tbody>
+                    <tr v-for="product in products">
+                      <td>
+                        @{{product.sku}}
+                      </td>
+                      <td>
+                        @{{product.name}}
+                      </td>
+                      <td>
+                        @{{product.jumlah}}
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="btn btn-info pull-right">Pesan sekarang</button>
+                <button type="submit" class="btn btn-info pull-right" @click="onOrder">Pesan sekarang</button>
               </div>
               <!-- /.box-footer -->
           </div>
@@ -85,5 +104,94 @@
 </div>
 <!-- /.content-wrapper -->
 
+
+@endsection
+@section('javascript')
+
+  <script type="text/javascript">
+    let API_URL = '{{url('api')}}';
+    var vo = new Vue({
+      el : '#app',
+      data : {
+        order_number : '{{ 'ORDER' . rand(10000,99999)}}',
+        sku : null,
+        jumlah : 1,
+        products: []
+      },
+      methods : {
+        onOrder(){
+          $.ajax({
+            url : API_URL + '/order/post',
+            type : 'POST',
+            data : {
+              order_number : this.order_number,
+              products : this.products,
+            },
+            success: (res) => {
+              alert(res.message);
+              this.products = [];
+            }
+          });
+        },
+        setJumlah(sku) {
+           let projects = this.products;
+           for (var i in projects) {
+             if (projects[i].sku == sku) {
+                projects[i].jumlah = projects[i].jumlah + 1;
+                break; //Stop this loop, we found it!
+             }
+           }
+        },
+        onBayar(){
+          $.ajax({
+            url : API_URL + '/product/post',
+            type : 'POST',
+            data : {
+              order_number : this.order_number,
+              products : this.products,
+              user_id : '{{Auth::user()->id}}'
+            },
+            success: (res) => {
+              alert(res.message);
+              this.products = [];
+            }
+          });
+        },
+        setData(resource){
+          // this.products.push(resource)
+          resource.jumlah = this.jumlah;
+          let res = this.products
+          var saring = res.filter(function(obj){
+            return obj.sku == resource.sku;
+          })[0];
+
+          if(typeof saring == 'undefined'){
+            this.products.push(resource)
+          }else{
+            this.setJumlah(saring.sku);
+          }
+
+          console.log(this.products);
+
+        },
+        onPressAdd(){
+          if(this.sku == null){
+            alert('Masukan SKU');
+            return;
+          }
+          // alert('hello : ' + this.sku)
+          $.ajax({
+            url : API_URL + '/product/get/' + this.sku,
+            success: (response) => {
+              this.setData(response)
+            },
+            error: function(error){
+              alert('data tidak ditemukan !');
+            }
+          });
+        }
+      }
+    })
+  </script>
 
 @endsection

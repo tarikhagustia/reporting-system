@@ -52,25 +52,28 @@
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ asset('img/avatar.png')}}" class="user-image" alt="User Image">
-              <span class="hidden-xs">Femi nemalita</span>
+              <img src="{{ asset('img/logo.png')}}" class="user-image" alt="User Image">
+              <span class="hidden-xs">{{Auth::user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{asset('img/avatar.jpg') }}" class="img-circle" alt="User Image">
+                <img src="{{asset('img/logo.png') }}" class="img-circle" alt="User Image">
 
                 <p>
-                  Femi nemalita - Beauty advisor
+                  {{Auth::user()->name}} - {{ (Auth::user()->access == 'ba') ? 'Beauty Advisor'  : 'User' }}
                 </p>
               </li>
               <!-- Menu Body -->
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="#" class="btn btn-default btn-flat" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>
                 </div>
               </li>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  {{ csrf_field() }}
+              </form>
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
@@ -154,7 +157,7 @@
           <ul class="treeview-menu">
             <li class="@if(Request::segment(2) == 'laporan-barang') active @endif"><a href="{{route('report.product')}}"><i class="fa fa-circle-o"></i> Laporan barang</a></li>
             <li class="@if(Request::segment(2) == 'laporan-penjualan-harian') active @endif"><a href="{{route('report.day-sales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan harian</a></li>
-            <li class="@if(Request::segment(2) == 'laporan-penjualan-bulanan') active @endif"><a href="{{route('report.monthlySales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan bulanan</a></li>
+            {{-- <li class="@if(Request::segment(2) == 'laporan-penjualan-bulanan') active @endif"><a href="{{route('report.monthlySales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan bulanan</a></li> --}}
 
           </ul>
         </li>
@@ -188,6 +191,8 @@
 <script src="{{ asset('plugins/fastclick/fastclick.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('js/app.min.js') }}"></script>
+
+<script src="{{asset('js/vue.min.js')}}" charset="utf-8"></script>
 <!-- AdminLTE for demo purposes -->
 
 @yield('javascript')

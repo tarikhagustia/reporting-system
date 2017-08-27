@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Target;
+use App\Models\Saleout;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +24,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $target = Target::getTarget();
+        $penjualan = Saleout::all()->sum('quantity');
+        $pencapaian = Saleout::ambilPencapaian()->get()->sum('sub_total');
+        if($target):
+          $presentase = ($pencapaian / $target->target_amount) * 100;
+        else:
+          $presentase = false;
+        endif;
+
+
+
+        return view('dashboard', [
+          'target' => $target,
+          'penjualan' => $penjualan,
+          'pencapaian' => $pencapaian,
+          'presentase' => $presentase,
+        ]);
     }
 }
