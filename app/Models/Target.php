@@ -11,7 +11,7 @@ class Target extends Model
     public static function getTarget()
     {
       // SELECT * FROM targets WHERE for_date = DATE(NOW());
-      $sql = self::where('for_date', DB::raw('DATE(NOW())'))->first();
+      $sql = self::where(DB::raw('MONTH(for_date)'), DB::raw('MONTH(NOW())'))->first();
       if($sql)
       {
         return $sql;

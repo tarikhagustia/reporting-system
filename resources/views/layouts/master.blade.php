@@ -156,7 +156,7 @@
           </a>
           <ul class="treeview-menu">
             <li class="@if(Request::segment(2) == 'laporan-barang') active @endif"><a href="{{route('report.product')}}"><i class="fa fa-circle-o"></i> Laporan barang</a></li>
-            <li class="@if(Request::segment(2) == 'laporan-penjualan-harian') active @endif"><a href="{{route('report.day-sales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan harian</a></li>
+            <li class="@if(Request::segment(2) == 'laporan-penjualan-harian') active @endif"><a href="{{route('report.day-sales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan</a></li>
             {{-- <li class="@if(Request::segment(2) == 'laporan-penjualan-bulanan') active @endif"><a href="{{route('report.monthlySales')}}"><i class="fa fa-circle-o"></i> Laporan penjualan bulanan</a></li> --}}
 
           </ul>
