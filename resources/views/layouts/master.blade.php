@@ -120,6 +120,20 @@
             <li class="@if(Request::segment(2) == 'tambah') active @endif"><a href="{{route('product.add')}}"><i class="fa fa-circle-o"></i> Input Produk Baru</a></li>
           </ul>
         </li>
+
+        <li class="treeview @if(Request::segment(1) == 'kategori') active @endif">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>Kategori</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="@if(Request::segment(2) == 'kategori') active @endif"><a href="{{route('category')}}"><i class="fa fa-circle-o"></i> Manage Kategori</a></li>
+          </ul>
+        </li>
+
         <li class="treeview @if(Request::segment(1) == 'penjualan') active @endif">
           <a href="#">
             <i class="fa fa-files-o"></i>

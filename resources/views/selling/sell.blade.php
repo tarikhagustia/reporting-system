@@ -64,7 +64,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="product in products">
+                  <tr v-for="(product, index) in products">
                     <td>
                       @{{product.sku}}
                     </td>
@@ -77,6 +77,11 @@
                     <td>
                       @{{product.jumlah * product.selling_price}}
                     </td>
+                    <td><button type="button" class="btn btn-small btn-danger pull-right" @click="deleteProduk(index)" name="button">hapus</button></td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">Total</td>
+                    <td>@{{total}}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -110,6 +115,16 @@
         note_number : null,
         sku : null,
         products: []
+      },
+      computed : {
+        total(){
+          var sum = 0;
+          for (var i = 0; i < this.products.length; i++) {
+            var total = this.products[i]['jumlah'] * this.products[i]['selling_price'];
+            sum += total
+          }
+          return sum;
+        }
       },
       methods : {
         setJumlah(sku) {
@@ -168,6 +183,9 @@
               alert('data tidak ditemukan !');
             }
           });
+        },
+        deleteProduk(index){
+          this.products.splice(index, 1)
         }
       }
     })

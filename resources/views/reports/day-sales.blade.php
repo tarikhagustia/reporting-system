@@ -94,7 +94,10 @@
                           :
                         </td>
                         <td>
-                          {{number_format($target->target_amount)}}
+                          @if ($target)
+
+                            {{number_format($target->target_amount)}}
+                          @endif
                         </td>
                       </tr>
                       <tr>
@@ -105,7 +108,7 @@
                           :
                         </td>
                         <td>
-                          {{number_format($target_harian , 2) }}
+                            {{number_format($target_harian , 2) }}
                         </td>
                       </tr>
 
@@ -181,8 +184,10 @@
                         <td>
                           :
                           @php
-                          $num = $s_harian / $target->target_amount;
-                          echo number_format($num * 100, 5) . " %";
+                            if($target):
+                              $num = $s_harian / $target->target_amount;
+                              echo number_format($num * 100, 5) . " %";
+                            endif;
                           @endphp
                         </td>
                       </tr>

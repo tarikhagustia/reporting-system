@@ -34,6 +34,18 @@ Route::group(['middleware' => 'auth'], function(){
   Route::get('/laporan/laporan-penjualan-bulanan', function(){
       return view('reports.monthlySales');
   })->name('report.monthlySales');
+
+  Route::get('kategori', 'CategoryController@index')->name('category');
+
+  Route::post('kategori', 'CategoryController@post_category')->name('category.post');
+
+  Route::get('kategori/delete/{id}', 'CategoryController@delete')->name('category.delete');
+
+  Route::get('produk/hapus/{id}', 'ProductController@delete')->name('product.delete');
+
+  Route::get('produk/edit/{id}', 'ProductController@edit')->name('product.edit');
+
+  Route::post('produk/edit/{id}', 'ProductController@edit_post')->name('product.edit.post');
 });
 
 

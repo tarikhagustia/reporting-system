@@ -29,6 +29,7 @@ class ProductController extends Controller
 
       $sql->sku = $request->sku;
       $sql->name = $request->name;
+      $sql->category_id = $request->category_id;
       $sql->purchase_price = $request->purchase_price;
       $sql->stock = $request->stock;
       $sql->selling_price = $request->selling_price;
@@ -52,5 +53,36 @@ class ProductController extends Controller
       return view('reports.products', [
         'products' => $products
       ]);
+    }
+
+    public function delete($id)
+    {
+      try {
+        $find = Product::find($id)->delete();
+        return redirect()->back()->with(['success' => 'Berhasil hapus produk']);
+      } catch (\Exception $e) {
+        return redirect()->back()->with(['error' => 'Gagal hapus produk']);
+      }
+    }
+
+    public function edit($id)
+    {
+      $product = Product::find($id);
+      $categories = Category::orderBy('category_name')->get();
+
+      return view('products.edit', ['product' => $product , 'categories' => $categories]);
+    }
+
+    public function edit_post(Request $request, $id)
+    {
+
+      try {
+        $find = Product::where('id', $id)
+                        ->update($request->except('_token'));
+        return redirect()->back()->with(['success' => 'Berhasil edit produk']);
+      } catch (\Exception $e) {
+        return redirect()->back()->with(['error' => 'Gagal edit produk ' . $e->getMessage()]);
+      }
+
     }
 }

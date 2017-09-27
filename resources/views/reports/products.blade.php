@@ -28,6 +28,7 @@
             <!-- /.box-header -->
             <!-- form start -->
               <div class="box-body">
+                @include('includes.message')
                 <div class="table-responsive">
                   <table id="product-report" class="table table-bordered table-striped">
                     <thead>
@@ -36,6 +37,7 @@
                         <th>Nama Produk</th>
                         <th>Jumlah Stok</th>
                         <th>Harga Jual</th>
+                        <th>#</th>
                       </tr>
                     </thead>
 
@@ -54,6 +56,7 @@
                           <td>
                             {{number_format($value->selling_price)}}
                           </td>
+                          <td><a href="{{route('product.delete', ['id' => $value->id])}}">Hapus</a>| <a href="{{route('product.edit',['id' => $value->id])}}">Edit</a></td>
                         </tr>
                       @endforeach
                     </tbody>
